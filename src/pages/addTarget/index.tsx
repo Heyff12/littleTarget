@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { View } from '@tarojs/components'
 import { AtForm, AtInput, AtButton } from 'taro-ui'
 import { fetchTarget, fetchAllTarget, saveTarget } from '../../actions/target'
-import {quarterValue,categoryValue} from '../../constants/actions'
+import {quarterValue,categoryValue,CategoryEnum} from '../../constants/actions'
 
 import './index.less'
 
@@ -57,10 +57,10 @@ class AddTarget extends Component {
     console.log(this.props, nextProps)
   }
   componentDidMount () {
-    const {quarter=0,category='study'} = getCurrentInstance().router.params
+    const {quarter=0,category=CategoryEnum.study} = getCurrentInstance().router.params
     console.log(quarter,category)
 
-    this.props.fetchTarget({quarter,category})
+    this.props.fetchTarget({quarter:+quarter,category})
     this.setState({
       operateData:{quarter,category}
     })

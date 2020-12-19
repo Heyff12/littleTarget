@@ -88,7 +88,7 @@ class Index extends Component {
 
   gotoToAdd = (data:Target.TargetOperatePrams) => () =>{
     const { quarter, category} = data
-    console.log(quarter,'gotoToAdd')
+    console.log(quarter,category)
     Taro.navigateTo({
       url: `pages/addTarget/index?quarter=${quarter}&category=${category}`,
     })
