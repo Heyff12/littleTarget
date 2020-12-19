@@ -6,7 +6,7 @@ import {
 
 const INITIAL_STATE = [
   {
-    study: [],
+    study: ["11", "22", "33"],
     career: [],
     life: [],
   },

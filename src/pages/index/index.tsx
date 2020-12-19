@@ -104,6 +104,15 @@ class Index extends Component {
     return (<EmptyTarget />)
   }
 
+  renderList = (data:string[]) => {
+    const domEnd = data.map(item=>{
+      return (
+      <View>{item}</View>
+      )
+    })
+    return domEnd
+  }
+
   renderTarget = () => {
     const { targets } = this.props
 
@@ -116,21 +125,21 @@ class Index extends Component {
               <View className="category" onClick={this.gotoToAdd({quarter:index,category:CategoryEnum.study})}>
                 {
                   study.length ? (
-                   study.map(item=>item)
+                   this.renderList(study)
                   ) : this.renderEmpty()
                 }
               </View>
               <View className="category" onClick={this.gotoToAdd({quarter:index,category:CategoryEnum.career})}>
                 {
                   career.length ? (
-                    career.map(item=>item)
+                    this.renderList(career)
                   ) : this.renderEmpty()
                 }
               </View>
               <View className="category" onClick={this.gotoToAdd({quarter:index,category:CategoryEnum.life})}>
                 {
                   life.length ? (
-                    life.map(item=>item)
+                    this.renderList(life)
                   ) : this.renderEmpty()
                 }
               </View>
