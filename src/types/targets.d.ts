@@ -1,9 +1,10 @@
 declare namespace Target {
-  enum Category {
-    study = "study",
-    career = "career",
-    life = "life",
-  }
+  // enum Category {
+  //   study = "study",
+  //   career = "career",
+  //   life = "life",
+  // }
+  type Category = "study" | "career" | "life";
   interface TargetItem {
     study: string[];
     career: string[];

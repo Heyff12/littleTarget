@@ -1,13 +1,15 @@
+import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Picker } from '@tarojs/components'
 import { AtButton } from 'taro-ui'
 import { fetchTarget, fetchAllTarget, saveTarget } from '../../actions/target'
+import {CategoryEnum,quarterValue} from '../../constants/actions'
 import EmptyTarget from '../../components/emptyTarget'
 
 import './index.less'
 
-const quarterValue = ['一','二','三','四']
+
 
 type PageStateProps = {
   targets: Target.TargetItem[]
@@ -84,8 +86,16 @@ class Index extends Component {
     })
   }
 
-  renderEmpty = (data:Target.TargetOperatePrams) => {
-    return (<EmptyTarget paramData={data} />)
+  gotoToAdd = (data:Target.TargetOperatePrams) => () =>{
+    const { quarter, category} = data
+    console.log(quarter,'gotoToAdd')
+    Taro.navigateTo({
+      url: `pages/addTarget/index?quarter=${quarter}&category=${category}`,
+    })
+  }
+
+  renderEmpty = () => {
+    return (<EmptyTarget />)
   }
 
   renderTarget = () => {
@@ -97,25 +107,25 @@ class Index extends Component {
         <View className="header">
             <View className="quarter">{`第${quarterValue[index]}季度`}</View>
             <View className="categoryContainer">
-              <View className="category">
+              <View className="category" onClick={this.gotoToAdd({quarter:index,category:CategoryEnum.study})}>
                 {
                   study.length ? (
                    study.map(item=>item)
-                  ) : this.renderEmpty({quarter:index,category:Target.Category.study})
+                  ) : this.renderEmpty()
                 }
               </View>
-              <View className="category">
+              <View className="category" onClick={this.gotoToAdd({quarter:index,category:CategoryEnum.career})}>
                 {
                   career.length ? (
                     career.map(item=>item)
-                  ) : this.renderEmpty({quarter:index,category:Target.Category.career})
+                  ) : this.renderEmpty()
                 }
               </View>
-              <View className="category">
+              <View className="category" onClick={this.gotoToAdd({quarter:index,category:CategoryEnum.life})}>
                 {
                   life.length ? (
                     life.map(item=>item)
-                  ) : this.renderEmpty({quarter:index,category:Target.Category.life})
+                  ) : this.renderEmpty()
                 }
               </View>
             </View>
