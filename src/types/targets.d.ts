@@ -13,6 +13,6 @@ declare namespace Target {
   interface TargetOperatePrams {
     quarter: number;
     category: Category;
-    data?: string[];
+    data?: string;
   }
 }

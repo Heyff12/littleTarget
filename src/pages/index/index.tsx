@@ -1,5 +1,5 @@
-import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
+import Taro from '@tarojs/taro'
 import { connect } from 'react-redux'
 import { View, Picker } from '@tarojs/components'
 import { AtButton } from 'taro-ui'
@@ -16,9 +16,9 @@ type PageStateProps = {
 }
 
 type PageDispatchProps = {
-  fetchTarget: () => void
-  fetchAllTarget: () => void
-  saveTarget: () => any
+  fetchTarget: (payload:Target.TargetOperatePrams) => string[]
+  fetchAllTarget: () => Target.TargetItem[]
+  saveTarget: (payload:Target.TargetOperatePrams) => string[]
 }
 
 type PageOwnProps = {}
@@ -94,6 +94,12 @@ class Index extends Component {
     })
   }
 
+  goto = () => {
+    Taro.navigateTo({
+      url: `pages/addTarget/index`,
+    })
+  }
+
   renderEmpty = () => {
     return (<EmptyTarget />)
   }
@@ -150,7 +156,7 @@ class Index extends Component {
             </Picker>
           </View>
           <View>
-            <AtButton type='primary' size='small'>导出图片</AtButton>
+            <AtButton type='primary' size='small' onClick={this.goto}>导出图片</AtButton>
           </View>
         </View>
         <View className="mainSection">

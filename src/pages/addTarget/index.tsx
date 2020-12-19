@@ -1,29 +1,31 @@
-import Taro,{ getCurrentInstance } from '@tarojs/taro'
+import { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View } from '@tarojs/components'
+import { AtForm, AtInput, AtButton } from 'taro-ui'
 import { fetchTarget, fetchAllTarget, saveTarget } from '../../actions/target'
-import {CategoryEnum,quarterValue,categoryValue} from '../../constants/actions'
+import {quarterValue,categoryValue} from '../../constants/actions'
 
 import './index.less'
 
 
 
 type PageStateProps = {
-  operateData: Target.TargetOperatePrams
+  targets:Target.TargetItem[]
 }
 
 type PageDispatchProps = {
-  fetchTarget: () => void
-  fetchAllTarget: () => void
-  saveTarget: () => any
+  fetchTarget: (payload:Target.TargetOperatePrams) => string[]
+  fetchAllTarget: () => Target.TargetItem[]
+  saveTarget: (payload:Target.TargetOperatePrams) => string[]
 }
 
 type PageOwnProps = {}
 
 type PageState = {
-  selector:number[],
-  selectorChecked:number
+  operateData: Target.TargetOperatePrams,
+  currentTarget:string,
+  listData: string[]
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps & PageState
@@ -47,18 +49,22 @@ interface AddTarget {
 }))
 class AddTarget extends Component {
   state = {
-    operateData:{}
+    operateData:{} as Target.TargetOperatePrams,
+    currentTarget:'',
+    listData:[] as string[]
   }
   componentWillReceiveProps (nextProps) {
     console.log(this.props, nextProps)
   }
   componentDidMount () {
-    const {quarter,category} = getCurrentInstance().router.params
+    const {quarter=0,category='study'} = getCurrentInstance().router.params
     console.log(quarter,category)
+
+    this.props.fetchTarget({quarter,category})
     this.setState({
       operateData:{quarter,category}
     })
-    this.props.fetchTarget()
+    this.getList()
   }
 
   componentWillUnmount () { }
@@ -66,6 +72,49 @@ class AddTarget extends Component {
   componentDidShow () { }
 
   componentDidHide () { }
+
+  getList = () => {
+    const {quarter,category} = this.state.operateData
+    const {targets} = this.props
+    targets[quarter] = targets[quarter] || {};
+    targets[quarter][category] = targets[quarter][category] || [];
+    const listData = targets[quarter][category] || []
+    this.setState({
+      listData
+    })
+  }
+
+  onSubmit  = () => {
+    const {currentTarget,operateData:{quarter,category}} = this.state
+    this.props.saveTarget({quarter,category,data:currentTarget})
+    this.getList()
+    this.setState({
+      currentTarget:''
+    })
+  }
+
+  handleChange(value)  {
+    this.setState({
+      currentTarget:value
+    })
+  }
+
+  noInput = () => {
+    return this.state.listData.length>=3
+  }
+
+  renderList = () => {
+    const {listData = []} = this.state
+    if(!listData.length){
+      return null
+    }
+    const domList = this.state.listData.map((item,index)=>{
+      return (
+      <View>{item}</View>
+      )
+    })
+    return domList
+  }
 
   render () {
     const {quarter,category} = this.state.operateData
@@ -75,6 +124,21 @@ class AddTarget extends Component {
           <View>第{quarterValue[quarter]}季度·{categoryValue[category]}</View>
         </View>
         <View className="mainSection">
+          <AtForm>
+            <AtInput
+              name='value'
+              title=''
+              type='text'
+              placeholder='单行文本'
+              value={this.state.currentTarget}
+              onChange={this.handleChange.bind(this)}
+              disabled={this.noInput()}
+            />
+            <AtButton onClick={this.onSubmit} disabled={this.noInput()}>保存</AtButton>
+          </AtForm>
+          <View className="targetList">
+            {this.renderList()}
+          </View>
         </View>
       </View>
     )

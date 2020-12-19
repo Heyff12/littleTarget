@@ -30,11 +30,14 @@ const INITIAL_STATE = [
 export default function targets(state = INITIAL_STATE, action) {
   switch (action.type) {
     case FETCH_TARGET:
-      // const { quarter, category } = action.payload;
-      return state[action.payload.quarter - 1][action.payload.category];
+      // const list = state[action.payload.quarter][action.payload.category];
+      // return list ? list : [];
+      return state;
     case SAVE_TARGET:
       const { quarter, category, data } = action.payload;
-      state[quarter - 1][category] = data;
+      state[quarter] = state[quarter] || {};
+      state[quarter][category] = state[quarter][category] || [];
+      state[quarter][category].push(data);
       return state;
     case FETCH_ALL_TARGET:
       return state;
