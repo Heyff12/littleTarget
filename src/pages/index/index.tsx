@@ -7,6 +7,7 @@ import html2canvas from 'html2canvas'
 import { fetchTarget, fetchAllTarget, saveTarget } from '../../actions/target'
 import {CategoryEnum,quarterValue} from '../../constants/actions'
 import EmptyTarget from '../../components/emptyTarget'
+import {INITIAL_STATE} from '../../reducers/target'
 
 import './index.less'
 
@@ -25,7 +26,8 @@ type PageOwnProps = {}
 
 type PageState = {
   selector:number[],
-  selectorChecked:number
+  selectorChecked:number,
+  targets: Target.TargetItem[]
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps & PageState
@@ -54,7 +56,8 @@ class Index extends Component {
 
   state = {
     selector: [2020,2021,2022],
-    selectorChecked: 2020
+    selectorChecked: 2020,
+    targets:[]
   }
 
   componentWillReceiveProps (nextProps) {
@@ -62,12 +65,22 @@ class Index extends Component {
   }
   componentDidMount () {
     this.setYearRange()
-    this.props.fetchAllTarget()
+    this.getData()
+  }
+
+  getData = () => {
+    const data = this.props.fetchAllTarget() || INITIAL_STATE
+    this.setState({
+      targets: data
+    })
   }
 
   componentWillUnmount () { }
 
-  componentDidShow () { }
+  componentDidShow () {
+    console.log('---------componentDidShow-------------')
+    this.getData()
+  }
 
   componentDidHide () { }
 
@@ -124,7 +137,7 @@ class Index extends Component {
   }
 
   renderTarget = () => {
-    const { targets } = this.props
+    const { targets } = this.state
 
     const endDom = targets.map((target,index) => {
       const { study,career,life} = target
