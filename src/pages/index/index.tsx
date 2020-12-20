@@ -3,11 +3,12 @@ import Taro from '@tarojs/taro'
 import { connect } from 'react-redux'
 import { View, Picker } from '@tarojs/components'
 import { AtButton } from 'taro-ui'
-import html2canvas from 'html2canvas'
+// import html2canvas from 'html2canvas'
 import { fetchTarget, fetchAllTarget, saveTarget } from '../../actions/target'
 import {CategoryEnum,quarterValue} from '../../constants/actions'
 import EmptyTarget from '../../components/emptyTarget'
 import {INITIAL_STATE} from '../../reducers/target'
+import html2canvas from '../../utils/html2canvas'
 
 import './index.less'
 
@@ -78,7 +79,6 @@ class Index extends Component {
   componentWillUnmount () { }
 
   componentDidShow () {
-    console.log('---------componentDidShow-------------')
     this.getData()
   }
 
@@ -112,6 +112,7 @@ class Index extends Component {
   }
 
   buildImage = () => {
+    console.log(document.getElementById('aaa'))
     console.log(this.tableImage.current)
     html2canvas(this.tableImage.current,{
       useCORS:true
@@ -191,7 +192,7 @@ class Index extends Component {
             <AtButton type='primary' size='small' onClick={this.buildImage}>导出图片</AtButton>
           </View>
         </View>
-        <View className="mainSection" ref={this.tableImage}>
+        <View className="mainSection" ref={this.tableImage} id="aaa">
           <View className="headerSection">
             <View className="header">
               <View className="quarter"></View>
