@@ -10,7 +10,6 @@ import EmptyTarget from '../../components/emptyTarget'
 
 import './index.less'
 
-console.log(html2canvas)
 
 type PageStateProps = {
   targets: Target.TargetItem[]
@@ -49,7 +48,9 @@ interface Index {
   }
 }))
 class Index extends Component {
-  tableImage = Taro.createRef()
+  // tableImage = Taro.createRef()
+  tableImage = React.createRef()
+  // tableImage = (node) => this.tableImage = node
 
   state = {
     selector: [2020,2021,2022],
@@ -101,12 +102,14 @@ class Index extends Component {
     // Taro.navigateTo({
     //   url: `pages/addtarget/index`,
     // })
+    console.log(this.tableImage)
     html2canvas(this.tableImage,{
       useCORS:true
     }).then(canvas=>{
       console.log(canvas)
-      var imgUrl = canvas.toDataURL("image/png", 1); // 此方法可以设置截图质量（0-1）
+      const imgUrl = canvas.toDataURL("image/png", 1).replace("image/png", "image/octet-stream"); // 获取生成的图片的url
       console.log("base64编码数据：", imgUrl);
+      window.location.href = imgUrl; // 下载图片
     })
   }
 

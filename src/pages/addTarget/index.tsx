@@ -1,5 +1,5 @@
-import { getCurrentInstance } from '@tarojs/taro'
-import React, { Component } from 'react'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
+import React,{Component} from 'react'
 import { connect } from 'react-redux'
 import { View } from '@tarojs/components'
 import { AtForm, AtInput, AtButton } from 'taro-ui'
@@ -48,6 +48,9 @@ interface AddTarget {
   }
 }))
 class AddTarget extends Component {
+  // constructor(props){
+  //   super(props)
+  // }
   state = {
     operateData:{} as Target.TargetOperatePrams,
     currentTarget:'',
@@ -57,7 +60,7 @@ class AddTarget extends Component {
     console.log(this.props, nextProps)
   }
   componentDidMount () {
-    const {quarter=0,category=CategoryEnum.study} = getCurrentInstance().router.params
+    const {quarter=0,category=CategoryEnum.study} = getCurrentInstance().router ? getCurrentInstance().router.params : {}
     console.log(quarter,category)
 
     this.props.fetchTarget({quarter:+quarter,category})
@@ -108,7 +111,7 @@ class AddTarget extends Component {
     if(!listData.length){
       return null
     }
-    const domList = this.state.listData.map((item,index)=>{
+    const domList = this.state.listData.map((item)=>{
       return (
       <View>{item}</View>
       )
