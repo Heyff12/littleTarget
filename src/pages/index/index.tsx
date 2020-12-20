@@ -3,6 +3,7 @@ import Taro from '@tarojs/taro'
 import { connect } from 'react-redux'
 import { View, Picker } from '@tarojs/components'
 import { AtButton } from 'taro-ui'
+import html2canvas from 'html2canvas'
 import { fetchTarget, fetchAllTarget, saveTarget } from '../../actions/target'
 import {CategoryEnum,quarterValue} from '../../constants/actions'
 import EmptyTarget from '../../components/emptyTarget'
@@ -90,13 +91,20 @@ class Index extends Component {
     const { quarter, category} = data
     console.log(quarter,category)
     Taro.navigateTo({
-      url: `pages/addTarget/index?quarter=${quarter}&category=${category}`,
+      url: `pages/addtarget/index?quarter=${quarter}&category=${category}`
     })
   }
 
-  goto = () => {
+  buildImage = () => {
     Taro.navigateTo({
-      url: `pages/addTarget/index`,
+      url: `pages/addtarget/index`,
+    })
+    html2canvas(document.getElementById('table'),{
+      useCORS:true
+    }).then(canvas=>{
+      console.log(canvas)
+      var imgUrl = canvas.toDataURL("image/png", 1); // 此方法可以设置截图质量（0-1）
+      console.log("base64编码数据：", imgUrl);
     })
   }
 
@@ -165,10 +173,10 @@ class Index extends Component {
             </Picker>
           </View>
           <View>
-            <AtButton type='primary' size='small' onClick={this.goto}>导出图片</AtButton>
+            <AtButton type='primary' size='small' onClick={this.buildImage}>导出图片</AtButton>
           </View>
         </View>
-        <View className="mainSection">
+        <View className="mainSection" id="table">
           <View className="headerSection">
             <View className="header">
               <View className="quarter"></View>
