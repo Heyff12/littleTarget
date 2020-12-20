@@ -94,16 +94,16 @@ class Index extends Component {
     const { quarter, category} = data
     console.log(quarter,category)
     Taro.navigateTo({
-      url: `pages/addtarget/index?quarter=${quarter}&category=${category}`
+      url: `/pages/addtarget/index?quarter=${quarter}&category=${category}`
     })
   }
 
   buildImage = () => {
     // Taro.navigateTo({
-    //   url: `pages/addtarget/index`,
+    //   url: `/pages/addtarget/index`,
     // })
-    console.log(this.tableImage)
-    html2canvas(this.tableImage,{
+    console.log(this.tableImage.current)
+    html2canvas(this.tableImage.current,{
       useCORS:true
     }).then(canvas=>{
       console.log(canvas)
