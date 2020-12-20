@@ -99,9 +99,6 @@ class Index extends Component {
   }
 
   buildImage = () => {
-    // Taro.navigateTo({
-    //   url: `/pages/addtarget/index`,
-    // })
     console.log(this.tableImage.current)
     html2canvas(this.tableImage.current,{
       useCORS:true
