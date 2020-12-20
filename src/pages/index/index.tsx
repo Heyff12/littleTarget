@@ -10,7 +10,7 @@ import EmptyTarget from '../../components/emptyTarget'
 
 import './index.less'
 
-
+console.log(html2canvas)
 
 type PageStateProps = {
   targets: Target.TargetItem[]
@@ -49,6 +49,8 @@ interface Index {
   }
 }))
 class Index extends Component {
+  tableImage = Taro.createRef()
+
   state = {
     selector: [2020,2021,2022],
     selectorChecked: 2020
@@ -96,10 +98,10 @@ class Index extends Component {
   }
 
   buildImage = () => {
-    Taro.navigateTo({
-      url: `pages/addtarget/index`,
-    })
-    html2canvas(document.getElementById('table'),{
+    // Taro.navigateTo({
+    //   url: `pages/addtarget/index`,
+    // })
+    html2canvas(this.tableImage,{
       useCORS:true
     }).then(canvas=>{
       console.log(canvas)
@@ -176,7 +178,7 @@ class Index extends Component {
             <AtButton type='primary' size='small' onClick={this.buildImage}>导出图片</AtButton>
           </View>
         </View>
-        <View className="mainSection" id="table">
+        <View className="mainSection" ref={this.tableImage}>
           <View className="headerSection">
             <View className="header">
               <View className="quarter"></View>
