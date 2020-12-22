@@ -40,7 +40,6 @@ export default function targets(state = INITIAL_STATE, action) {
       state[quarter][category].push(data);
       return state;
     case FETCH_ALL_TARGET:
-      console.log(state);
       return state;
     default:
       return state;

@@ -8,7 +8,7 @@ declare module "*.less";
 declare module "*.scss";
 declare module "*.sass";
 declare module "*.styl";
-declare module "html2canvas";
+declare module "wxml2canvas";
 
 // @ts-ignore
 declare const process: {

@@ -3,12 +3,10 @@ import Taro from '@tarojs/taro'
 import { connect } from 'react-redux'
 import { View, Picker } from '@tarojs/components'
 import { AtButton } from 'taro-ui'
-// import html2canvas from 'html2canvas'
 import { fetchTarget, fetchAllTarget, saveTarget } from '../../actions/target'
 import {CategoryEnum,quarterValue} from '../../constants/actions'
 import EmptyTarget from '../../components/emptyTarget'
 import {INITIAL_STATE} from '../../reducers/target'
-import html2canvas from '../../utils/html2canvas'
 
 import './index.less'
 
@@ -105,23 +103,12 @@ class Index extends Component {
 
   gotoToAdd = (data:Target.TargetOperatePrams) => () =>{
     const { quarter, category} = data
-    console.log(quarter,category)
     Taro.navigateTo({
       url: `/pages/addtarget/index?quarter=${quarter}&category=${category}`
     })
   }
 
   buildImage = () => {
-    console.log(document.getElementById('aaa'))
-    console.log(this.tableImage.current)
-    html2canvas(this.tableImage.current,{
-      useCORS:true
-    }).then(canvas=>{
-      console.log(canvas)
-      const imgUrl = canvas.toDataURL("image/png", 1).replace("image/png", "image/octet-stream"); // 获取生成的图片的url
-      console.log("base64编码数据：", imgUrl);
-      window.location.href = imgUrl; // 下载图片
-    })
   }
 
   renderEmpty = () => {
@@ -178,36 +165,37 @@ class Index extends Component {
   render () {
     const { selector,selectorChecked } = this.state
     return (
-      <View className='index'>
-        <View className="fixedTop">
-          <View></View>
-          <View className="middle">
-            <Picker mode='selector' range={selector} onChange={this.onChange}>
-              <View className='picker'>
-                {selectorChecked}
-              </View>
-            </Picker>
-          </View>
-          <View>
-            <AtButton type='primary' size='small' onClick={this.buildImage}>导出图片</AtButton>
-          </View>
-        </View>
-        <View className="mainSection" ref={this.tableImage} id="aaa">
-          <View className="headerSection">
-            <View className="header">
-              <View className="quarter"></View>
-              <View className="categoryContainer">
-                <View className="category">学习</View>
-                <View className="category">事业</View>
-                <View className="category">生活</View>
-              </View>
+        <View className='index'>
+          <View className="fixedTop">
+            <View></View>
+            <View className="middle">
+              <Picker mode='selector' range={selector} onChange={this.onChange}>
+                <View className='picker'>
+                  {selectorChecked}
+                </View>
+              </Picker>
+            </View>
+            <View>
+              <AtButton type='primary' size='small' onClick={this.buildImage}>导出图片</AtButton>
             </View>
           </View>
-          <View className="container">
-            {this.renderTarget()}
+          <View className="mainSection" ref={this.tableImage}>
+            <View className="headerSection">
+              <View className="header">
+                <View className="quarter"></View>
+                <View className="categoryContainer">
+                  <View className="category">学习</View>
+                  <View className="category">事业</View>
+                  <View className="category">生活</View>
+                </View>
+              </View>
+            </View>
+            <View className="container">
+              {this.renderTarget()}
+            </View>
           </View>
+          <wxml-to-canvas class="widget"></wxml-to-canvas>
         </View>
-      </View>
     )
   }
 }
