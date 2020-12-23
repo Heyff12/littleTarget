@@ -7,7 +7,8 @@ import { fetchTarget, fetchAllTarget, saveTarget } from '../../actions/target'
 import {CategoryEnum,quarterValue} from '../../constants/actions'
 import EmptyTarget from '../../components/emptyTarget'
 import {INITIAL_STATE} from '../../reducers/target'
-
+import Painter from 'mina-painter'
+import Card from "../../palette/card";
 import './index.less'
 
 
@@ -26,7 +27,9 @@ type PageOwnProps = {}
 type PageState = {
   selector:number[],
   selectorChecked:number,
-  targets: Target.TargetItem[]
+  targets: Target.TargetItem[],
+  imagePath: string,
+  template: any
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps & PageState
@@ -56,7 +59,9 @@ class Index extends Component {
   state = {
     selector: [2020,2021,2022],
     selectorChecked: 2020,
-    targets:[]
+    targets:[],
+    imagePath: "",
+    template: new Card().palette()
   }
 
   componentWillReceiveProps (nextProps) {
@@ -109,6 +114,20 @@ class Index extends Component {
   }
 
   buildImage = () => {
+    this.saveImage()
+  }
+
+  onImgOK = (path) => {
+    this.setState({imagePath:path})
+  }
+
+  saveImage = () => {
+    const {imagePath} = this.state
+    if (imagePath) {
+      Taro.saveImageToPhotosAlbum({
+        filePath: imagePath
+      });
+    }
   }
 
   renderEmpty = () => {
@@ -163,7 +182,7 @@ class Index extends Component {
   }
 
   render () {
-    const { selector,selectorChecked } = this.state
+    const { selector,selectorChecked ,template} = this.state
     return (
         <View className='index'>
           <View className="fixedTop">
@@ -194,7 +213,11 @@ class Index extends Component {
               {this.renderTarget()}
             </View>
           </View>
-          <wxml-to-canvas class="widget"></wxml-to-canvas>
+          {/* <wxml-to-canvas class="widget"></wxml-to-canvas> */}
+          <Painter
+            customStyle='margin-left:40rpx'
+            palette={template}
+            onImgOK={this.onImgOK} />
         </View>
     )
   }
