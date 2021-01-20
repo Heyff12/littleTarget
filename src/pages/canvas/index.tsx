@@ -164,36 +164,29 @@ class Index extends Component {
         ctx.fill();
     }
 
-    // 创建新 image 对象，用作图案
-    // var img1 = new Image();
-    // img1.src = imgUrl
-    // img1.onload = function() {
-    //   // 创建图案
-    //   ctx.drawImage(img1,0,0);
-    //   var ptrn = ctx.createPattern(img1, 'repeat');
-    //   ctx.fillStyle = ptrn;
-    //   ctx.fillRect(0, 0, 150, 150);
-    // }
-
     // 获取图片信息
-    // Taro.getImageInfo({
-    //   src: '../../assets/img/book.jpg',
-    //   success: resImg => {
-    //     // 创建一个图片对象
-    //     const img = canvas.createImage();
+    Taro.getImageInfo({
+      src: imgUrl,
+      success: resImg => {
+        // 创建一个图片对象
+        const img = canvas.createImage();
 
-    //     img.src = '../../' + resImg.path
-    //     img.onload = () => {
-    //       // 绘制图像到画布
-    //       ctx.drawImage(img, 0, 0, 300, 150)
-    //     }
+        img.src = '../../' + resImg.path
+        img.onload = () => {
+          // 绘制图像到画布
+          ctx.drawImage(img, 0, 0, 300, 150)
+          // 绘制文本
+    ctx.font = "16px Times New Roman";
+    ctx.fillStyle = 'pink'
+    ctx.fillText('英语直播', 20, 16)
+        }
 
 
-    //   },
-    //   fail(fail) {
-    //     console.log(fail)
-    //   }
-    // })
+      },
+      fail(fail) {
+        console.log(fail)
+      }
+    })
     ctx.globalAlpha = 1;
     // 绘制文本
     ctx.font = "16px Times New Roman";
@@ -201,12 +194,12 @@ class Index extends Component {
     ctx.fillText('英语直播', 20, 16)
 
     // // 同上面的功能
-    // const img = canvas.createImage();
+    const img = canvas.createImage();
 
-    // img.src = imgUrl
-    // img.onload = () => {
-    //   ctx.drawImage(img, 20, 200, 70, 70)
-    // }
+    img.src = imgUrl
+    img.onload = () => {
+      ctx.drawImage(img, 20, 200, 70, 70)
+    }
 
     // 绘制文本
     ctx.font = "14px Times New Roman";
