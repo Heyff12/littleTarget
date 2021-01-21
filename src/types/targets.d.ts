@@ -14,5 +14,6 @@ declare namespace Target {
     quarter: number;
     category: string;
     data?: string;
+    index?: number;
   }
 }

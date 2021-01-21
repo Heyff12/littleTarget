@@ -2,8 +2,8 @@ import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React,{Component} from 'react'
 import { connect } from 'react-redux'
 import { View } from '@tarojs/components'
-import { AtForm, AtInput, AtButton } from 'taro-ui'
-import { fetchTarget, fetchAllTarget, saveTarget } from '../../actions/target'
+import { AtForm, AtInput, AtButton,AtIcon } from 'taro-ui'
+import { fetchTarget, fetchAllTarget, saveTarget,deleteTarget } from '../../actions/target'
 import {quarterValue,categoryValue,CategoryEnum} from '../../constants/actions'
 
 import './index.less'
@@ -18,6 +18,7 @@ type PageDispatchProps = {
   fetchTarget: (payload:Target.TargetOperatePrams) => string[]
   fetchAllTarget: () => Target.TargetItem[]
   saveTarget: (payload:Target.TargetOperatePrams) => string[]
+  deleteTarget: (payload:Target.TargetOperatePrams) => boolean
 }
 
 type PageOwnProps = {}
@@ -45,6 +46,9 @@ interface AddTarget {
   },
   saveTarget (payload) {
     dispatch(saveTarget(payload))
+  },
+  deleteTarget(payload) {
+    dispatch(deleteTarget(payload))
   }
 }))
 class AddTarget extends Component {
@@ -60,6 +64,17 @@ class AddTarget extends Component {
     console.log(this.props, nextProps)
   }
   componentDidMount () {
+  }
+
+  componentWillUnmount () { }
+
+  componentDidShow () {
+    this.getCurrentInfo()
+  }
+
+  componentDidHide () { }
+
+  getCurrentInfo = () => {
     const {quarter=0,category=CategoryEnum.study} = getCurrentInstance().router ? getCurrentInstance().router.params : {}
     console.log(quarter,category)
 
@@ -69,12 +84,6 @@ class AddTarget extends Component {
     })
     this.getList()
   }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
 
   getList = () => {
     const {quarter,category} = this.state.operateData
@@ -106,14 +115,24 @@ class AddTarget extends Component {
     return this.state.listData.length>=3
   }
 
+  handleDelete = (index) => () => {
+    console.log(index)
+    const {operateData:{quarter,category}} = this.state
+    this.props.deleteTarget({quarter,category,index})
+    this.getList()
+  }
+
   renderList = () => {
     const {listData = []} = this.state
     if(!listData.length){
       return null
     }
-    const domList = this.state.listData.map((item)=>{
+    const domList = this.state.listData.map((item,index)=>{
       return (
-      <View>{item}</View>
+      <View className="list">
+        <View className="text">{item}</View>
+        <AtIcon className="del" value="trash" size="14" onClick={this.handleDelete(index)}></AtIcon>
+      </View>
       )
     })
     return domList
@@ -132,12 +151,14 @@ class AddTarget extends Component {
               name='value'
               title=''
               type='text'
-              placeholder='单行文本'
+              placeholder='请输入一个小目标'
               value={this.state.currentTarget}
               onChange={this.handleChange.bind(this)}
               disabled={this.noInput()}
             />
-            <AtButton onClick={this.onSubmit} disabled={this.noInput()}>保存</AtButton>
+            <View className="btn">
+              <AtButton type='primary' onClick={this.onSubmit} disabled={this.noInput()}>添加</AtButton>
+            </View>
           </AtForm>
           <View className="targetList">
             {this.renderList()}

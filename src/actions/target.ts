@@ -2,6 +2,7 @@ import {
   FETCH_TARGET,
   FETCH_ALL_TARGET,
   SAVE_TARGET,
+  DELETE_TARGET,
 } from "../constants/actions";
 
 export const fetchTarget = (payload: Target.TargetOperatePrams) => {
@@ -13,6 +14,12 @@ export const fetchTarget = (payload: Target.TargetOperatePrams) => {
 export const saveTarget = (payload: Target.TargetOperatePrams) => {
   return {
     type: SAVE_TARGET,
+    payload,
+  };
+};
+export const deleteTarget = (payload: Target.TargetOperatePrams) => {
+  return {
+    type: DELETE_TARGET,
     payload,
   };
 };
