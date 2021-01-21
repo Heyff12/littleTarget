@@ -1,6 +1,9 @@
 import Taro from "@tarojs/taro";
-import imgUrl from "../../assets/img/book.jpg";
+import imgUrl from "../../assets/img/1.jpg";
 import { CategoryEnum, quarterValue } from "../../constants/actions";
+// const imgUrl =
+//   "https://png.pngtree.com/thumb_back/fw800/background/20190222/ourmid/pngtree-blue-watercolor-dreamy-fashion-minimalistic-background-image_52710.jpg";
+
 const fontTitleSize = 24;
 const fontSize = 18;
 const fontTargetSize = 14;
@@ -13,6 +16,7 @@ const targetPosition = {
 
 export const draw = (canvas, canvasParams, targets: Target.TargetItem[]) => {
   const { width, height } = canvasParams;
+  const ratio = width / height;
   // Canvas 的绘图上下文
   const ctx = canvas.getContext("2d");
   // 设备像素比
@@ -27,13 +31,26 @@ export const draw = (canvas, canvasParams, targets: Target.TargetItem[]) => {
     src: imgUrl,
     success: (resImg) => {
       console.log(resImg);
-      // 创建一个图片对象
+      // 创建一个图片对象--设置背景图
       const img = canvas.createImage();
+      const { width: imgWidth, height: imgHeight, path } = resImg;
+      let imgW, imgH, imgL, imgT;
+      if (imgWidth / imgHeight >= ratio) {
+        imgW = (height * imgWidth) / imgHeight;
+        imgH = height;
+        imgT = 0;
+        imgL = -(imgW - width) / 2;
+      } else {
+        imgW = width;
+        imgH = (width * imgHeight) / imgWidth;
+        imgT = -(imgH - height) / 2;
+        imgL = 0;
+      }
 
-      img.src = "../../" + resImg.path;
+      img.src = "../../" + path;
       img.onload = () => {
         // 绘制图像到画布
-        ctx.drawImage(img, 0, 0, width, height);
+        ctx.drawImage(img, imgL, imgT, imgW, imgH);
         // 解决下载来的图片是黑色背景的问题,设置透明层
         const radialgradient = ctx.createRadialGradient(
           width / 2,
@@ -43,9 +60,10 @@ export const draw = (canvas, canvasParams, targets: Target.TargetItem[]) => {
           height / 2,
           height / 2
         );
-        radialgradient.addColorStop(0, "rgba(255,255,255,0.6)");
-        radialgradient.addColorStop(0.6, "rgba(255,255,255,0.5)");
-        radialgradient.addColorStop(1, "rgba(255,255,255,0.2)");
+        radialgradient.addColorStop(0, "rgba(255,255,255,0.5)");
+        radialgradient.addColorStop(0.4, "rgba(255,255,255,0.4)");
+        radialgradient.addColorStop(0.6, "rgba(255,255,255,0.2)");
+        radialgradient.addColorStop(1, "rgba(255,255,255,0.1)");
         ctx.fillStyle = radialgradient;
         ctx.fillRect(0, 0, width, height);
         drawTable(ctx, canvasParams, targets);

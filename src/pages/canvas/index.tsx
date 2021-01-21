@@ -174,7 +174,7 @@ class Index extends Component {
         img.src = '../../' + resImg.path
         img.onload = () => {
           // 绘制图像到画布
-          ctx.drawImage(img, 0, 0, 300, 150)
+          ctx.drawImage(img, 200, 200, 300, 150)
           // 绘制文本
     ctx.font = "16px Times New Roman";
     ctx.fillStyle = 'pink'
