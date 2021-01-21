@@ -6,7 +6,7 @@ import { CategoryEnum, quarterValue } from "../../constants/actions";
 
 const fontTitleSize = 24;
 const fontSize = 18;
-const fontTargetSize = 14;
+const fontTargetSize = 13;
 const fontColor = "black";
 const targetPosition = {
   [CategoryEnum.study]: 0,
@@ -83,12 +83,39 @@ const verticalText = (ctx, words, top, fontHeight) => {
   });
 };
 
-const targetText = (ctx, targets, left, top) => {
+// todo  优化算法，可以容纳更多行
+const targetText = (ctx, targets, left, top, lineWidth) => {
   const fontHeight = fontTargetSize + 8;
+  let currentTop = top - fontHeight;
   ctx.font = `${fontTargetSize}px Times New Roman`;
   ctx.fillStyle = fontColor;
   targets.forEach((target, index) => {
-    ctx.fillText(target, left, top + fontHeight * index);
+    const text = `· ${target}`;
+    const titleText = ctx.measureText(text);
+    const titleWidth = titleText.width;
+    if (titleWidth <= lineWidth) {
+      currentTop += fontHeight;
+      ctx.fillText(text, left, currentTop);
+      return;
+    }
+    // console.log("titleText---", titleText);
+    // console.log("lineWidth---titleWidth", lineWidth, titleWidth);
+    const len = text.length;
+    let firstlineIndex = Math.floor(len / 2);
+    for (let i = firstlineIndex; i < len; i++) {
+      const charStr = text.slice(0, i);
+      const charStrText = ctx.measureText(charStr);
+      const charStrWidth = charStrText.width;
+      if (charStrWidth <= lineWidth) {
+        firstlineIndex = i;
+      } else {
+        break;
+      }
+    }
+    currentTop += fontHeight;
+    ctx.fillText(text.slice(0, firstlineIndex), left, currentTop);
+    currentTop += fontHeight;
+    ctx.fillText(text.slice(firstlineIndex), left, currentTop);
   });
 };
 
@@ -100,7 +127,6 @@ const drawTable = (ctx, canvasParams, targets: Target.TargetItem[]) => {
   // 绘制标题
   const title = "2021小目标";
   const titleText = ctx.measureText(title);
-  console.log("titleText---", titleText);
   const titleWidth = titleText.width;
   ctx.font = `${fontTitleSize}px Times New Roman`;
   ctx.fillStyle = fontColor;
@@ -127,7 +153,7 @@ const drawTable = (ctx, canvasParams, targets: Target.TargetItem[]) => {
     keys.forEach((key) => {
       const left = leftHeadWidth + topHeadWidth * targetPosition[key];
       const top = height * 0.2 * (index + 1);
-      targetText(ctx, target[key], left, top);
+      targetText(ctx, target[key], left, top, topHeadWidth - 7);
     });
   });
 };

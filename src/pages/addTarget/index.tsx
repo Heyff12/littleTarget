@@ -60,6 +60,7 @@ class AddTarget extends Component {
     currentTarget:'',
     listData:[] as string[]
   }
+  maxlength = 14
   componentWillReceiveProps (nextProps) {
     console.log(this.props, nextProps)
   }
@@ -107,7 +108,7 @@ class AddTarget extends Component {
 
   handleChange(value)  {
     this.setState({
-      currentTarget:value
+      currentTarget:value.slice(0,this.maxlength)
     })
   }
 
@@ -148,10 +149,11 @@ class AddTarget extends Component {
         <View className="mainSection">
           <AtForm>
             <AtInput
+              clear
               name='value'
               title=''
               type='text'
-              placeholder='请输入一个小目标'
+              placeholder={`请输入一个精确的小目标，${this.maxlength}个字符以内`}
               value={this.state.currentTarget}
               onChange={this.handleChange.bind(this)}
               disabled={this.noInput()}

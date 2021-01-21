@@ -144,7 +144,7 @@ class Index extends Component {
   renderList = (data:string[]) => {
     const domEnd = data.map(item=>{
       return (
-      <View>{item}</View>
+      <View className="item">{item}</View>
       )
     })
     return domEnd
@@ -201,7 +201,8 @@ class Index extends Component {
         const canvasParams = {
           width,height
         }
-        draw(node,canvasParams,targets)
+        draw(node,canvasParams,targets);
+        // todo open export
         // this.exportImage();
       })
   }
@@ -230,9 +231,9 @@ class Index extends Component {
               <View className="header">
                 <View className="quarter"></View>
                 <View className="categoryContainer">
-                  <View className="category">学习</View>
-                  <View className="category">事业</View>
-                  <View className="category">生活</View>
+                  <View className="category title">学习</View>
+                  <View className="category title">事业</View>
+                  <View className="category title">生活</View>
                 </View>
               </View>
             </View>
